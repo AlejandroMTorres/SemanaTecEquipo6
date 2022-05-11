@@ -1,34 +1,32 @@
-
-from random import randrange
+from random import randrange, choice
 from turtle import *
 from freegames import square, vector
 
 food = vector(0, 0)
 snake = [vector(10, 0)]
 aim = vector(0, -10)
-speed = vector (10,10)
+
+colores = ['black', '#6b54d3', '#2fb022', '#cb58d2', 'green', 'blue', 'yellow', '#ea7428', '#32bd26', '#f3618d']
+color_snake = choice(colores)
+colores.remove(color_snake)
+color_food = choice(colores)
+colores.remove(color_food)
+print(color_snake, color_food, colores)
 
 
 def change(x, y):
-    "hange snake direction."
+    """Change snake direction."""
     aim.x = x
     aim.y = y
 
-def faster():
-    speed.x=speed.x+5
-    speed.y=speed.y+5
-
-def slower():
-    speed.x=speed.x-5
-    speed.y=speed.y-5
 
 def inside(head):
-    "Return True if head inside boundaries."
+    """Return True if head inside boundaries."""
     return -200 < head.x < 190 and -200 < head.y < 190
 
 
 def move():
-    "Move snake forward one segment."
+    """Move snake forward one segment."""
     head = snake[-1].copy()
     head.move(aim)
 
@@ -49,22 +47,38 @@ def move():
     clear()
 
     for body in snake:
-        square(body.x, body.y, 9, 'black')
+        square(body.x, body.y, 9, color_snake)
 
-    square(food.x, food.y, 9, 'green')
+    square(food.x, food.y, 9, color_food)
     update()
     ontimer(move, 100)
 
+writer = Turtle()
+tracer(False)
+
+
+def info_alumnos():
+    writer.hideturtle()
+    writer.up()
+    writer.goto(0,190)
+    writer.color('blue')
+    writer.write("Kevin ALberto Crisostomo A00832188", align='center',font=('chalkboard',15,'normal'))
+    writer.goto(0,170)
+    writer.color('pink')
+    writer.write("Alejandro Melendez Torres A00832494", align='center',font=('chalkboard',15,'normal'))
+    writer.goto(0,150)
+    writer.color('green')
+    writer.write("José Edmundo Romo Castillo A01197772", align='center',font=('chalkboard',15,'normal'))
 
 setup(420, 420, 370, 0)
 hideturtle()
 tracer(False)
 listen()
-onkey(lambda: faster(),'+')
-onkey(lambda: slower(),'-')
-onkey(lambda: change(speed.x, 0), 'Right')
-onkey(lambda: change(-speed.x, 0), 'Left')
-onkey(lambda: change(0, speed.y), 'Up')
-onkey(lambda: change(0, -speed.y), 'Down')
+info_alumnos()
+onkey(lambda: change(10, 0), 'Right')
+onkey(lambda: change(-10, 0), 'Left')
+onkey(lambda: change(0, 10), 'Up')
+onkey(lambda: change(0, -10), 'Down')
 move()
 done()
+
