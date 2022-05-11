@@ -33,15 +33,7 @@ def change(x, y):
 def inside(head):
     """Return True if head inside boundaries."""
     return -200 < head.x < 190 and -200 < head.y < 190
-
-def food_pos():
-    global food
-    if (not(inside(food)) and (food in snake)):
-        food.x = randrange(-15, 15) * 10
-        food.y = randrange(-15, 15) * 10
-        food_pos()
         
-
 def move():
     """Move snake forward one segment."""
     global contador
@@ -71,10 +63,6 @@ def move():
             food.move(food_dir)            
         
     clear()
-    #while ()
-        #food.x = randrange(-15, 15) * 10
-        #food.y = randrange(-15, 15) * 10
-        #food_pos()
 
     for body in snake:
         square(body.x, body.y, 9, color_snake)
