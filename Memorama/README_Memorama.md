@@ -1,140 +1,123 @@
-# Memorama
 # SemanaTec - Herramientas Computacionales
 
 Integrantes del Equipo
-- Alejandro Melendez Torres
 - Jose Edmundo Romo Castillo A01197772
+- Alejandro Melendez Torres
 - Kevin Alberto Crisostomo A00832188
 
 >El codigo a continuacion fue modificado por Alejandro Melendez y Kevin Cristomo
 
 ``` python
-from math import*
-
+from random import *
 from turtle import *
 
-from freegames import vector
+from freegames import path
+
+car = path('car.gif')
+tiles = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😇', '😉', '😊', '🙂', '🙃', '☺', '😋', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '🥲', '🤪', '😜', '😝', '😛', '🤑', '😎', '🤓', '🥸', '🧐'] * 2
+#tiles = list(range(32)) * 2
+state = {'mark': None}
+hide = [True] * 64
+contador = 0
 
 
-def line(start, end):
-    """Draw line from start to end."""
+def square(x, y):
+    """Draw white square with black outline at (x, y)."""
     up()
-    goto(start.x, start.y)
+    goto(x, y)
     down()
-    goto(end.x, end.y)
-
-
-def square(start, end):
-    """Draw square from start to end."""
-    up()
-    goto(start.x, start.y)
-    down()
+    color('black', 'white')
     begin_fill()
-
     for count in range(4):
-        forward(end.x - start.x)
+        forward(50)
         left(90)
-
     end_fill()
 
 
-def circle2(start, end):
-    """Draw circle from start to end."""
-    up()
-    goto(start.x,start.y)
-    down()
-    begin_fill()
-    d= math.sqrt(((end.x - start.x)**2)+((end.y - start.y)**2))
-    circle(d/2)
-    end_fill()
+def index(x, y):
+    """Convert (x, y) coordinates to tiles index."""
+    return int((x + 200) // 50 + ((y + 200) // 50) * 8)
 
 
-def rectangle(start, end):
-    """Draw rectangle from start to end."""
-    up()
-    goto(start.x, start.y)
-    down()
-    begin_fill()
-
-    for count in range(2):
-        forward(end.x - start.x)
-        left(90)
-        forward(end.y - start.y)
-        left(90)
-
-    end_fill()
-
-
-def triangle(start, end):
-    """Draw triangle from start to end."""
-    up()
-    goto(start.x, start.y)
-    down()
-    begin_fill()
-
-    for count in range(3):
-        forward(end.x - start.x)
-        left(120)
-
-    end_fill()
+def xy(count):
+    """Convert tiles count to (x, y) coordinates."""
+    return (count % 8) * 50 - 200, (count // 8) * 50 - 200
 
 
 def tap(x, y):
-    """Store starting point or draw shape."""
-    start = state['start']
+    """Update mark and hidden tiles based on tap."""
+    global contador
+    contador += 1
+    spot = index(x, y)
+    mark = state['mark']
 
-    if start is None:
-        state['start'] = vector(x, y)
+    if mark is None or mark == spot or tiles[mark] != tiles[spot]:
+        state['mark'] = spot
     else:
-        shape = state['shape']
-        end = vector(x, y)
-        shape(start, end)
-        state['start'] = None
+        hide[spot] = False
+        hide[mark] = False
+        state['mark'] = None
+
+def draw():
+    """Draw image and tiles."""
+    clear()
+    goto(0, 0)
+    shape(car)
+    stamp()
+
+    for count in range(64):
+        if hide[count]:
+            x, y = xy(count)
+            square(x, y)
+
+    mark = state['mark']
+
+    if mark is not None and hide[mark]:
+        x, y = xy(mark)
+        up()
+        goto(x + 2, y)
+        color('black')
+        write(tiles[mark], font=('Arial', 30, 'normal'))
+
+    update()
+    up()
+    goto(-290,-290)
+    write("Numero de taps: " + str(contador), font=('Arial', 20, 'normal'), align='left')
+    goto(290,-245)
+    if (not any(hide)):
+        write("Ganaste un auto!!, Felicidades", font=('Arial', 20, 'normal'), align='right')
+        
+    ontimer(draw, 100)
 
 
-def store(key, value):
-    """Store value in state at key."""
-    state[key] = value
+writer = Turtle()
+tracer(False)
 
 
 def info_alumnos():
-    up()
-    goto(14,190)
-    color('blue')
-    write("Kevin ALberto Crisostomo A00832188", align='right',font=('Arial',10,'normal'))
-    goto(18,170)
-    color('pink')
-    write("Alejandro Melendez Torres A00832494", align='right',font=('Arial',10,'normal'))
-    goto(35,150)
-    color('green')
-    write("José Edmundo Romo Castillo A01197772", align='right',font=('Arial',10,'normal'))
-    
+    writer.hideturtle()
+    writer.up()
+    writer.goto(0,250)
+    writer.color('blue')
+    writer.write("Kevin ALberto Crisostomo A00832188", align='center',font=('chalkboard',15,'normal'))
+    writer.goto(0,230)
+    writer.color('pink')
+    writer.write("Alejandro Melendez Torres A00832494", align='center',font=('chalkboard',15,'normal'))
+    writer.goto(0,210)
+    writer.color('green')
+    writer.write("José Edmundo Romo Castillo A01197772", align='center',font=('chalkboard',15,'normal'))
 
-
-
-state = {'start': None, 'shape': line }
-setup(420, 420, 500, 0)
-info_alumnos() 
-#Programacion basada en eventos 
-#funcion que atinde los eventos del mosuse
-
-
+#shuffle(tiles)
+setup(600, 600, 370, 0)
+info_alumnos()
+addshape(car)
+hideturtle()
+tracer(False)
 onscreenclick(tap)
-listen()
-
-
-#funcion que atiene los eventos del teclado
-onkey(undo, 'u')
-onkey(lambda: color('black'), 'K')
-onkey(lambda: color('white'), 'W')
-onkey(lambda: color('green'), 'G')
-onkey(lambda: color('blue'), 'B')
-onkey(lambda: color('red'), 'R')
-onkey(lambda: store('shape', line), 'l')
-onkey(lambda: store('shape', square), 's')
-onkey(lambda: store('shape', circle2), 'c')
-onkey(lambda: store('shape', rectangle), 'r')
-onkey(lambda: store('shape', triangle), 't')
-#siempre debe ser la ultima instrucción- glutmainloop()- 
+draw()
 done()
 ```
+> Del codigo original se agrego una función que despliegue el nombre de los integrantes, se agrego la función de info a alumnos, se hizo la pantalla más grande, cambiamos los tiles por emojis, en tap agregamos un contador, en draw desplegamos el contador (número de taps) y desplegamos cuando ganaste el juego.
+
+
+![MemoGIF](https://user-images.githubusercontent.com/105224205/168130697-e324fcd6-4eaf-4894-8d45-36d5d9423a8f.gif)
