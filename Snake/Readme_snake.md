@@ -112,8 +112,7 @@ onkey(lambda: change(0, 10), 'Up')
 onkey(lambda: change(0, -10), 'Down')    
 move()
 done()
+```
+> Se agrego dos funicones una incrementa la veloidad y la otra la disminuye, ademas se permitio mover la comida utilizando el atributo .move del los vectores.
 
-#imagen
-![imagen] (https://user-images.githubusercontent.com/84153631/168131935-ed231ae6-21c0-480a-b3f9-f57e8675fdae.mp4)
-
-
+![snake](https://user-images.githubusercontent.com/105224535/168132775-084a0f80-fdab-4755-99f2-b61936ae6163.gif)
