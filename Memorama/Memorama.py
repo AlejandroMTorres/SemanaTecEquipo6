@@ -4,9 +4,11 @@ from turtle import *
 from freegames import path
 
 car = path('car.gif')
-tiles = list(range(32)) * 2
+tiles = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😇', '😉', '😊', '🙂', '🙃', '☺', '😋', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '🥲', '🤪', '😜', '😝', '😛', '🤑', '😎', '🤓', '🥸', '🧐'] * 2
+#tiles = list(range(32)) * 2
 state = {'mark': None}
 hide = [True] * 64
+contador = 0
 
 
 def square(x, y):
@@ -34,6 +36,8 @@ def xy(count):
 
 def tap(x, y):
     """Update mark and hidden tiles based on tap."""
+    global contador
+    contador += 1
     spot = index(x, y)
     mark = state['mark']
 
@@ -43,7 +47,6 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
-
 
 def draw():
     """Draw image and tiles."""
@@ -67,14 +70,40 @@ def draw():
         write(tiles[mark], font=('Arial', 30, 'normal'))
 
     update()
+    up()
+    goto(-290,-290)
+    write("Numero de taps: " + str(contador), font=('Arial', 20, 'normal'), align='left')
+    goto(290,-245)
+    if (not any(hide)):
+        write("Ganaste un auto!!, Felicidades", font=('Arial', 20, 'normal'), align='right')
+        
     ontimer(draw, 100)
 
 
-shuffle(tiles)
-setup(420, 420, 370, 0)
+writer = Turtle()
+tracer(False)
+
+
+def info_alumnos():
+    writer.hideturtle()
+    writer.up()
+    writer.goto(0,250)
+    writer.color('blue')
+    writer.write("Kevin ALberto Crisostomo A00832188", align='center',font=('chalkboard',15,'normal'))
+    writer.goto(0,230)
+    writer.color('pink')
+    writer.write("Alejandro Melendez Torres A00832494", align='center',font=('chalkboard',15,'normal'))
+    writer.goto(0,210)
+    writer.color('green')
+    writer.write("José Edmundo Romo Castillo A01197772", align='center',font=('chalkboard',15,'normal'))
+
+#shuffle(tiles)
+setup(600, 600, 370, 0)
+info_alumnos()
 addshape(car)
 hideturtle()
 tracer(False)
 onscreenclick(tap)
 draw()
 done()
+
