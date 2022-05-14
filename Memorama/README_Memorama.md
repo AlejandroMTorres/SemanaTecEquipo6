@@ -121,3 +121,5 @@ done()
 
 
 ![MemoGIF](https://user-images.githubusercontent.com/105224205/168130697-e324fcd6-4eaf-4894-8d45-36d5d9423a8f.gif)
+
+Link del video de José Romo : https://youtu.be/Sr6LJAs3Buk
